@@ -1,0 +1,59 @@
+HELP.md
+target/
+
+### Local secrets (never commit) ###
+config/secret.properties
+config/secret.properties.example
+.env
+.env.local
+.env.example
+
+### Frontend tooling ###
+frontend/node_modules/
+frontend/temporary screenshots/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Kök dizindeki geçici Node/araç kalıntıları (gerçek proje değil) ###
+/node_modules/
+/package-lock.json
+/package.json
+
+### Ignite çalışma zamanı verisi (kalıcı sayfa/WAL dosyaları) ###
+/ignite/
+
+### HTTP scratch dosyası (canlı JWT içerir) ###
+pp.http
+
+### Ödev PDF'i asla repoya girmez ###
+*.docx.pdf
+VoltWiseProject*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
