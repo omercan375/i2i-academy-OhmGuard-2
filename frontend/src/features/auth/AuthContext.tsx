@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createAccount, fetchCurrentUser, login as loginRequest } from "@/features/auth/api";
+import { adminEnter, createAccount, fetchCurrentUser, login as loginRequest } from "@/features/auth/api";
 import { clearToken, getToken, setToken, setUnauthorizedHandler } from "@/lib/authToken";
 import { AuthContext, type AuthContextValue, type AuthStatus } from "@/features/auth/context";
 import type { CreateAccountRequest, CurrentUser } from "@/types/dto";
@@ -59,6 +59,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [login],
   );
 
+  const adminLogin = React.useCallback(async () => {
+    const token = await adminEnter();
+    setToken(token);
+    try {
+      const currentUser = await fetchCurrentUser();
+      setUser(currentUser);
+      setStatus("authenticated");
+    } catch (err) {
+      clearToken();
+      throw err;
+    }
+  }, []);
+
   const logout = React.useCallback(() => {
     clearToken();
     setUser(null);
@@ -66,8 +79,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = React.useMemo<AuthContextValue>(
-    () => ({ status, user, login, register, logout }),
-    [status, user, login, register, logout],
+    () => ({ status, user, login, register, adminLogin, logout }),
+    [status, user, login, register, adminLogin, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -57,4 +57,16 @@ public class AuthService {
             throw new SaveException("user cant save");
         }
     }
+    public String adminEnter(){
+        String adminEmail = "admin@gmail.com";
+        UsersTable adminEnter =  usersRepo.findByEmail(adminEmail);
+        if (adminEnter == null) {
+            throw new ResourceNotFoundException("EMAIL DOES NOT EXIST");
+        }
+        boolean matchesPassword = passwordEncoder.matches("admin", adminEnter.getPasswordHash());
+        if (!matchesPassword) {
+            throw new InvalidResourceException("PASSWORD DOES NOT MATCH");
+        }
+        return jwtService.generateToken(adminEnter.getId());
+    }
 }

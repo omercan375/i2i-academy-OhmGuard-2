@@ -9,6 +9,10 @@ export function createAccount(payload: CreateAccountRequest) {
   return api.post<string>("/api/auth/create-account", payload, { auth: false, responseType: "text" });
 }
 
+export function adminEnter() {
+  return api.post<string>("/api/auth/admin-enter", undefined, { auth: false, responseType: "text" });
+}
+
 export function fetchCurrentUser(signal?: AbortSignal) {
   return api.get<CurrentUser>("/api/auth/me", { signal });
 }

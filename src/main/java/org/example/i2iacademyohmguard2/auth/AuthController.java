@@ -3,7 +3,7 @@ package org.example.i2iacademyohmguard2.auth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.i2iacademyohmguard2.auth.dto.CreateAccountDto;
-import org.example.i2iacademyohmguard2.auth.dto.CurrentUserDto;
+import org.example.i2iacademyohmguard2.users.dto.CurrentUserDto;
 import org.example.i2iacademyohmguard2.auth.dto.LoginDto;
 import org.example.i2iacademyohmguard2.users.UsersService;
 import org.example.i2iacademyohmguard2.users.UsersTable;
@@ -34,14 +34,11 @@ public class AuthController {
         return ResponseEntity.ok("Account created");
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<CurrentUserDto> me(@RequestHeader("Authorization") String token) {
-        UsersTable user = usersService.findByToken(token);
-        return ResponseEntity.ok(CurrentUserDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .build());
+
+    @PostMapping("/admin-enter")
+    public ResponseEntity<String> adminEnter() {
+        String adminToken = authService.adminEnter();
+        return ResponseEntity.ok(adminToken);
     }
+
 }

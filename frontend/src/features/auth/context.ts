@@ -8,6 +8,7 @@ export interface AuthContextValue {
   user: CurrentUser | null;
   login: (email: string, password: string) => Promise<void>;
   register: (payload: CreateAccountRequest) => Promise<void>;
+  adminLogin: () => Promise<void>;
   logout: () => void;
 }
 

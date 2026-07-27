@@ -1,4 +1,4 @@
-package org.example.i2iacademyohmguard2.auth.dto;
+package org.example.i2iacademyohmguard2.users.dto;
 
 import lombok.*;
 
@@ -11,7 +11,6 @@ import java.util.UUID;
 @Builder
 public class CurrentUserDto {
 
-    private UUID id;
     private String email;
     private String firstName;
     private String lastName;

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/features/auth/useAuth";
 import { loginSchema, type LoginFormValues } from "@/features/auth/schemas";
@@ -13,11 +13,12 @@ import { LogoMark } from "@/components/ui/logo-mark";
 import { ApiError } from "@/lib/apiClient";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, adminLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = React.useState(false);
   const [formError, setFormError] = React.useState<string | null>(null);
+  const [adminLoading, setAdminLoading] = React.useState(false);
 
   const {
     register,
@@ -41,6 +42,26 @@ export default function LoginPage() {
             : err.message
           : "Beklenmeyen bir hata oluştu.";
       setFormError(message);
+    }
+  };
+
+  const onAdminEnter = async () => {
+    setFormError(null);
+    setAdminLoading(true);
+    try {
+      await adminLogin();
+      toast.success("Yönetici olarak giriş yapıldı.");
+      navigate("/panel", { replace: true });
+    } catch (err) {
+      const message =
+        err instanceof ApiError
+          ? err.status === 404 || err.status === 400
+            ? "Yönetici hesabı bulunamadı."
+            : err.message
+          : "Yönetici girişi yapılamadı.";
+      setFormError(message);
+    } finally {
+      setAdminLoading(false);
     }
   };
 
@@ -100,6 +121,23 @@ export default function LoginPage() {
               Giriş yap
             </Button>
           </form>
+
+          <div className="mt-5 flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-xs text-ink-400">veya</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
+          <Button
+            type="button"
+            variant="secondary"
+            className="mt-4 w-full"
+            loading={adminLoading}
+            onClick={onAdminEnter}
+          >
+            <ShieldCheck className="size-4" aria-hidden="true" />
+            Yönetici girişi
+          </Button>
         </div>
 
         <p className="mt-5 text-center text-sm text-ink-600">
